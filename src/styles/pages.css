@@ -84,7 +84,7 @@
 }
 .now-why-label {
   font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #8B877E; margin-bottom: var(--sp-3);
+  color: #8B877E; margin-bottom: 8px;
 }
 .now-why ul { display: flex; flex-direction: column; gap: 7px; }
 .now-why li {
@@ -96,6 +96,10 @@
   width: 4px; height: 4px; border-radius: 50%;
   background: var(--ember);
   margin-top: 7px; flex-shrink: 0;
+}
+.now-reason {
+  font-size: 13px; line-height: 1.6; color: #D8D4CB;
+  margin: 0;
 }
 
 .now-actions {

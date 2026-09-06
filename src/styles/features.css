@@ -435,7 +435,7 @@
 .flow-counter { font-family: var(--font-mono); font-size: 11.5px; color: #8F8B84; }
 .now-card#flow-card { display: flex; flex-direction: column; }
 #flow-stage {
-  position: relative; min-height: 360px;
+  position: relative; min-height: 240px;
   display: flex; flex-direction: column;
 }
 .flow-nav {
@@ -464,7 +464,7 @@
 .flow-eyebrow {
   display: inline-flex; align-items: center; gap: 7px;
   font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--focus-dim);
+  text-transform: uppercase; color: #B8B4AC;
 }
 .flow-eyebrow .nav-icon { width: 13px; height: 13px; background-color: currentColor; }
 .allcaught-card {

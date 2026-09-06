@@ -222,6 +222,9 @@ export async function openBell() {
   if (!panel) return;
   isOpen = true;
   panel.classList.add("open");
+  // Opening the center counts as reading everything — clears the red
+  // unread dots so the list doesn't stay flooded.
+  await notif.markAllRead();
   await renderPanel();
   position();
 }

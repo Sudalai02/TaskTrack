@@ -208,18 +208,19 @@ export async function clear(storeName) {
   if (!ref) return localClear(storeName);
   cacheOf(storeName).clear();
   loaded.delete(storeName);
-  writeAsync(
-    getDocs(ref).then((snap) => {
-      const ids = snap.docs.map((d) => d.id);
-      for (let i = 0; i < ids.length; i += BATCH_LIMIT) {
-        const batch = writeBatch(firestore);
-        for (const id of ids.slice(i, i + BATCH_LIMIT)) {
-          batch.delete(doc(firestore, cloudPath(storeName), String(id)));
-        }
-        batch.commit();
+  try {
+    const snap = await getDocs(ref);
+    const ids = snap.docs.map((d) => d.id);
+    for (let i = 0; i < ids.length; i += BATCH_LIMIT) {
+      const batch = writeBatch(firestore);
+      for (const id of ids.slice(i, i + BATCH_LIMIT)) {
+        batch.delete(doc(firestore, cloudPath(storeName), String(id)));
       }
-    })
-  );
+      await batch.commit();
+    }
+  } catch (err) {
+    console.warn(`[db] clear "${storeName}" failed`, err?.message || err);
+  }
 }
 
 // ---------- meta helpers (key/value convenience) ----------

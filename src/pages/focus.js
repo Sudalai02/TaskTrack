@@ -361,6 +361,7 @@ export async function renderFocus(view, alive = () => true) {
     `;
     wireIdle();
     wireHistory();
+    paintRing();
 
     function modeMinutes(m) {
       return m === "short" ? pomo.shortBreakMinutes : m === "long" ? pomo.longBreakMinutes : pomo.focusMinutes;

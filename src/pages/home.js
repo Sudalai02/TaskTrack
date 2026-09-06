@@ -99,7 +99,7 @@ async function buildFlow({ tasks, habitList, todayEvents, logsToday, goals, proj
   for (const h of habitList) {
     if (!(h.weekdays || []).includes(wd)) continue;
     if (doneHabitIds.has(h.id)) continue;
-    timed.push({ kind: "habit", minute: minutesOf(h.timeOfDay), ref: h });
+    timed.push({ kind: "habit", minute: minutesOf(h.timeOfDay), ref: h, streak: await habitsSvc.streak(h) });
   }
   timed
     .filter((x) => x.minute !== null)
@@ -353,23 +353,15 @@ export async function renderHome(view, alive = () => true) {
         <div class="now-card-v2 now-card" id="flow-card">
           <div class="flow-topline">
             <span class="flow-type-badge">${flowBadge(current)}</span>
-            <span class="flow-counter num">${slider.index + 1} / ${flow.length}</span>
+            <span class="flow-counter num">${flow.length}</span>
           </div>
-          <div id="flow-stage">${flowBody(current, { projectNameOf, goalNameOf, today })}</div>
+          <div id="flow-stage">${flowBody(current, { projectNameOf, goalNameOf, gProg, pProg, tasks, today })}</div>
           <div class="now-actions-v2">
-            ${
-              current.kind === "task"
-                ? `<button class="btn btn-primary" id="start-focus-btn">${icon("play")} Start focus</button>
-                   <a class="btn btn-secondary" href="#/tasks">${icon("check")} Open task</a>`
-                : current.kind === "habit"
-                  ? `<button class="btn btn-primary" id="start-focus-btn">${icon("play")} Open habits</button>`
-                  : current.kind === "event"
-                    ? `<a class="btn btn-primary" href="#/calendar">${icon("calendar")} View in calendar</a>`
-                    : `<a class="btn btn-primary" href="${current.kind === "deadline" ? "#/goals" : "#/projects"}">${icon("flag")} Open</a>`
-            }
+            ${primaryActionHTML(current)}
+            ${(() => { const sec = secondaryAction(current); return sec ? `<a class="btn btn-secondary" href="${sec.href}">${icon("check")} ${sec.label}</a>` : ""; })()}
           </div>
           <div class="flow-nav-v2">
-            <button class="btn btn-sm btn-ghost" id="reschedule-btn" ${current.kind !== "task" ? "hidden" : ""}>Reschedule</button>
+            ${leftNav(current)}
             <span class="flow-dots-v2" id="flow-dots"></span>
             <button class="btn btn-sm btn-ghost" id="flow-next-btn">Next</button>
           </div>
@@ -501,15 +493,17 @@ export async function renderHome(view, alive = () => true) {
           </div>
           ${
             scheduledHabits.length
-              ? `<div class="habitchip-row">${scheduledHabits
+              ? `<div class="habit-snap-list">${scheduledHabits
+                  .slice(0, 3)
                   .map(
                     (s) => `
-              <a class="habit-chip ${s.done ? "done" : ""}" href="#/goals">
-                <span class="habit-chip-title">${s.done ? "✓" : "○"} ${escapeHtml(s.hb.title)}</span>
-                <span class="habit-chip-meta num">🕐 ${s.hb.timeOfDay} · ${s.hb.durationMinutes}m${!s.done && s.streak > 0 ? ` · ${s.streak}🔥` : ""}</span>
-              </a>`
+              <a class="habit-snap-row" href="#/goals">
+                <span class="habit-snap-check ${s.done ? "done" : ""}">${s.done ? "✓" : "○"}</span>
+                <span class="habit-snap-name">${escapeHtml(s.hb.title)}</span>
+                <span class="habit-snap-meta num">🕐 ${s.hb.timeOfDay} · ${s.hb.durationMinutes}m${!s.done && s.streak > 0 ? ` · ${s.streak}🔥` : ""}</span>
+              </a>`.trim()
                   )
-                  .join("")}</div>`
+                  .join("")}${scheduledHabits.length > 3 ? `<a class="habit-view-all" href="#/goals">View all ${scheduledHabits.length} habits</a>` : ""}</div>`
               : `<div class="empty-state" style="padding:16px 8px;"><p>No habits scheduled today.</p></div>`
           }
         </div>
@@ -569,11 +563,8 @@ export async function renderHome(view, alive = () => true) {
 
   view.querySelector("#start-focus-btn")?.addEventListener("click", () => {
     if (current?.kind === "task" && current?.ref?.id) sessionStorage.setItem("nexora-focus-task", current.ref.id);
-    if (current?.kind === "habit") {
-      window.location.hash = "#/goals";
-    } else {
-      window.location.hash = "#/focus";
-    }
+    const route = current?.kind === "habit" || current?.kind === "deadline" ? "#/goals" : "#/focus";
+    window.location.hash = route;
   });
 
   view.querySelector("#reschedule-btn")?.addEventListener("click", () => {
@@ -696,12 +687,41 @@ function healthOf(p, status) {
 }
 
 function flowBadge(item) {
-  if (item.kind === "task") return item.overdue ? "⏰ Overdue task" : "🎯 Task";
-  if (item.kind === "event") return "📅 Event";
-  if (item.kind === "habit") return "🔄 Habit";
-  if (item.kind === "deadline") return "⏰ Goal deadline";
-  if (item.kind === "pdeadline") return "⏰ Project deadline";
+  if (item.kind === "task") return item.overdue ? "⏰ Overdue task" : "Task";
+  if (item.kind === "event") return "Event";
+  if (item.kind === "habit") return "Habit";
+  if (item.kind === "deadline") return "Goal";
+  if (item.kind === "pdeadline") return "Project";
   return "Item";
+}
+
+function primaryLabel(item) {
+  if (item.kind === "task") return "Start focus";
+  if (item.kind === "habit") return "Start habit";
+  if (item.kind === "deadline") return "Continue goal";
+  if (item.kind === "pdeadline") return "Open project";
+  return "View";
+}
+
+function primaryActionHTML(item) {
+  if (item.kind === "event") return `<a class="btn btn-primary" href="#/calendar">${icon("calendar")} View in calendar</a>`;
+  if (item.kind === "pdeadline") return `<a class="btn btn-primary" href="#/projects?id=${item.ref.id}">${icon("flag")} Open project</a>`;
+  return `<button class="btn btn-primary" id="start-focus-btn">${icon("play")} ${primaryLabel(item)}</button>`;
+}
+
+function secondaryAction(item) {
+  if (item.kind === "task") return { label: "Open task", href: "#/tasks" };
+  if (item.kind === "habit") return { label: "Open habits", href: "#/goals" };
+  if (item.kind === "deadline") return { label: "View goal", href: "#/goals" };
+  if (item.kind === "pdeadline") return { label: "View project", href: `#/projects?id=${item.ref.id}` };
+  return null;
+}
+
+function leftNav(item) {
+  if (item.kind === "task") return `<button class="btn btn-sm btn-ghost" id="reschedule-btn">Reschedule</button>`;
+  if (item.kind === "event") return `<a class="btn btn-sm btn-ghost" href="#/calendar">Calendar</a>`;
+  if (item.kind === "pdeadline") return `<a class="btn btn-sm btn-ghost" href="#/projects?id=${item.ref.id}">Details</a>`;
+  return `<a class="btn btn-sm btn-ghost" href="#/goals">Details</a>`;
 }
 
 function fmtEventRange(startH, endH) {
@@ -709,7 +729,7 @@ function fmtEventRange(startH, endH) {
 }
 
 function flowBody(item, ctx) {
-  const { projectNameOf, goalNameOf, today } = ctx;
+  const { projectNameOf, goalNameOf, gProg, pProg, tasks, today } = ctx;
 
   if (item.kind === "task") {
     const t = taskService.decorate([item.ref])[0];
@@ -726,12 +746,12 @@ function flowBody(item, ctx) {
       <div class="now-task">${escapeHtml(t.title)}</div>
       <div class="now-meta-row">
         ${t.priority ? `<span class="prio-${t.priority.toLowerCase()}">${priorityEmoji(t.priority)} ${t.priority}</span>` : ""}
-        <span>⏱ <span class="num">~${t.estimatedMinutes}m</span></span>
+        ${t.estimatedMinutes ? `<span>⏱ <span class="num">${t.estimatedMinutes}m</span></span>` : ""}
         ${dueLabel}
       </div>
       <div class="now-why">
-        <div class="now-why-label">Why this now</div>
-        <ul>${reasons.map((r) => `<li>${r}</li>`).join("")}</ul>
+        <div class="now-why-label">Why now</div>
+        <p class="now-reason">${escapeHtml(reasons.slice(0, 3).join(" · "))}</p>
       </div>`;
   }
 
@@ -739,7 +759,7 @@ function flowBody(item, ctx) {
     const e = item.ref;
     const tm = typeMeta(e.type);
     return `
-      <div class="flow-eyebrow">${tm.emoji} Scheduled for you</div>
+      <div class="flow-eyebrow">${tm.emoji} On your calendar</div>
       <div class="now-task">${escapeHtml(e.title)}</div>
       <div class="now-meta-row">
         <span>🕐 <span class="num">${fmtEventRange(e.startHour, e.endHour)}</span></span>
@@ -748,42 +768,50 @@ function flowBody(item, ctx) {
       </div>
       <div class="now-why">
         <div class="now-why-label">Heads-up</div>
-        <ul><li>Be ready before it starts${e.notes ? ` — note: ${escapeHtml(e.notes)}` : ""}.</li></ul>
+        <p class="now-reason">Clear anything that overlaps — be ready when it starts${e.notes ? ` — note: ${escapeHtml(e.notes)}` : ""}.</p>
       </div>`;
   }
 
   if (item.kind === "habit") {
     const h = item.ref;
     return `
-      <div class="flow-eyebrow">${icon("clock")} Keep the streak alive</div>
+      <div class="flow-eyebrow">${icon("check")} Keep the streak alive</div>
       <div class="now-task">${escapeHtml(h.title)}</div>
       <div class="now-meta-row">
         <span>🕐 <span class="num">${h.timeOfDay}</span></span>
         <span>⏱ <span class="num">${h.durationMinutes} min</span></span>
+        ${item.streak > 0 ? `<span>🔥 <span class="num">${item.streak} day streak</span></span>` : ""}
       </div>
       <div class="now-why">
-        <div class="now-why-label">Why this now</div>
-        <ul><li>Scheduled for today and not logged yet — small steps compound.</li></ul>
+        <div class="now-why-label">Why now</div>
+        <p class="now-reason">Scheduled for today and not logged yet — small steps compound.</p>
       </div>`;
   }
 
   if (item.kind === "deadline" || item.kind === "pdeadline") {
     const r = item.ref;
-    const daysLeft = diffDaysSafe(today, item.kind === "deadline" ? r.targetDate : r.deadline);
-    const label = item.kind === "deadline" ? "Goal deadline approaching" : "Project deadline approaching";
-    const when = daysLeft <= 0 ? "Today" : daysLeft === 1 ? "Tomorrow" : `In ${daysLeft} days`;
-    const name = item.kind === "deadline" ? r.title : r.name;
+    const isGoal = item.kind === "deadline";
+    const due = isGoal ? r.targetDate : r.deadline;
+    const daysLeft = diffDaysSafe(today, due);
+    const when = daysLeft <= 0 ? "Due today" : daysLeft === 1 ? "Due tomorrow" : `Due in ${daysLeft} days`;
+    const prog = isGoal ? (gProg?.[r.id] || {}) : (pProg?.[r.id] || {});
+    const pct = prog.pct ?? 0;
+    const remaining = Math.max(0, (prog.total ?? 0) - (prog.done ?? 0));
     return `
-      <div class="flow-eyebrow">⏰ ${label}</div>
-      <div class="now-task">${escapeHtml(name)}</div>
+      <div class="flow-eyebrow">${icon("flag")} Deadline approaching</div>
+      <div class="now-task">${escapeHtml(isGoal ? r.title : r.name)}</div>
       <div class="now-meta-row">
-        <span>${when}</span>
-        <span>${fmtDate(item.kind === "deadline" ? r.targetDate : r.deadline)}</span>
-        ${goalNameOf(r.goalId) && item.kind === "pdeadline" ? `<span>🎯 ${goalNameOf(r.goalId)}</span>` : ""}
+        <span>⏰ <span class="num">${when}</span></span>
+        ${isGoal
+          ? `<span><span class="num">${pct}%</span> complete</span>`
+          : prog.total > 0
+            ? `<span><span class="num">${prog.done}</span>/${prog.total} complete</span>`
+            : `<span>No tasks yet</span>`}
+        ${!isGoal && goalNameOf(r.goalId) ? `<span>🎯 ${escapeHtml(goalNameOf(r.goalId))}</span>` : ""}
       </div>
       <div class="now-why">
-        <div class="now-why-label">Heads-up</div>
-        <ul><li>The clock is ticking on this one — plan concrete steps today.</li></ul>
+        <div class="now-why-label">Why now</div>
+        <p class="now-reason">${isGoal ? "The deadline is approaching — a little progress today keeps you on track." : `The deadline is approaching — ${remaining} remaining item${remaining === 1 ? "" : "s"} need attention.`}</p>
       </div>`;
   }
 
