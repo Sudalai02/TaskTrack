@@ -680,7 +680,7 @@ export async function renderInsights(view, alive = () => true) {
       <!-- GOALS -->
       <section class="card insight-module">
         <div class="module-head">
-          <span class="module-emoji acc-violet">🎯</span>
+          <span class="module-emoji acc-amber">🎯</span>
           <div><h2>Goals</h2></div>
         </div>
         <div class="goals-list">
@@ -732,7 +732,7 @@ export async function renderInsights(view, alive = () => true) {
       <!-- HABIT CONSISTENCY -->
       <section class="card insight-module">
         <div class="module-head">
-          <span class="module-emoji acc-teal">🔄</span>
+          <span class="module-emoji acc-clay">🔄</span>
           <div><h2>Habit Consistency</h2></div>
         </div>
         <div class="habits-list">

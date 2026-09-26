@@ -274,7 +274,7 @@
 .error-card p { font-size: 13px; color: var(--graphite); margin-bottom: var(--sp-5); }
 
 /* ---------- RESPONSIVE ---------- */
-@media (max-width: 1000px) {
+@media (max-width: 1023px) {
   .notes-layout-v2 { grid-template-columns: 1fr; }
   .note-list-scroll { max-height: 300px; }
   .detail-stats { grid-template-columns: repeat(2, 1fr); }
@@ -358,7 +358,7 @@
 }
 .panel-body { max-height: min(58vh, 480px); overflow-y: auto; }
 
-@media (max-width: 560px) {
+@media (max-width: 414px) {
   .modal-backdrop { padding: 5vh 10px 16px; }
   .modal,
   .panel-modal,
@@ -373,7 +373,7 @@
 }
 
 /* Desktop: keep wide forms comfortable */
-@media (min-width: 561px) {
+@media (min-width: 415px) {
   .form-modal.form-modal { width: min(560px, calc(100vw - 48px)); }
 }
 
@@ -456,13 +456,14 @@
 .flow-arrow .nav-icon { width: 15px; height: 15px; background-color: currentColor; }
 .rot180 { transform: rotate(180deg); }
 .flow-dots { display: flex; gap: 7px; align-items: center; }
+/* the flow sits on the light green card, so the dots are dark, not white */
 .flow-dot {
   width: 7px; height: 7px; border-radius: var(--r-full);
-  background: rgba(255,255,255,0.30); transition: all 0.18s ease;
+  background: var(--grad-dot); transition: all 0.18s ease;
 }
-.flow-dot.passed { background: rgba(255,255,255,0.58); }
+.flow-dot.passed { background: var(--grad-dot-passed); }
 .flow-dot.active {
-  width: 22px; background: #FFFFFF;
+  width: 22px; background: var(--grad-dot-active);
 }
 .flow-eyebrow {
   display: inline-flex; align-items: center; gap: 7px;
@@ -845,14 +846,14 @@ mark {
 /* ============================================================
    RESPONSIVE — new components
    ============================================================ */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .insight-modules { grid-template-columns: 1fr; }
   .insight-module.span-2 { grid-column: span 1; }
   .risk-layout { grid-template-columns: 1fr; gap: var(--sp-4); }
   .notes-layout-v2 { grid-template-columns: 1fr 1fr; }
   .folder-rail { grid-column: span 2; flex-direction: row; flex-wrap: wrap; }
 }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .notes-layout-v2 { grid-template-columns: 1fr; }
   .folder-rail { grid-column: span 1; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .folder-rail::-webkit-scrollbar { display: none; }

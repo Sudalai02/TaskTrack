@@ -266,7 +266,7 @@ textarea:focus-visible {
 .card-flush { border-radius: 16px; }
 
 /* ============ SHELL: TOPBAR (mobile) ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .topbar { min-height: var(--topbar-h); }
 
   .search-shell {
@@ -286,7 +286,7 @@ textarea:focus-visible {
 }
 
 /* ============ SHELL: BOTTOM NAV (mobile) ============ */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .bottom-nav {
     height: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -347,7 +347,7 @@ textarea:focus-visible {
 }
 
 /* ============ SEARCH OVERLAY (mobile) ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .search-backdrop { padding: var(--sp-2); }
   .search-modal {
     border-radius: 18px;
@@ -359,7 +359,7 @@ textarea:focus-visible {
 }
 
 /* ============ TOAST — stays above bottom nav ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .toast-wrap {
     bottom: calc(var(--bottomnav-h) + 14px + env(safe-area-inset-bottom, 0px));
   }
@@ -408,10 +408,10 @@ textarea:focus-visible {
 
 /* Category color accents — edge strip, meta dot, meta text */
 .goal-card .cat-personal { background: var(--focus); }
-.goal-card .cat-career   { background: var(--violet); }
+.goal-card .cat-career   { background: var(--sky); }
 .goal-card .cat-health   { background: var(--good); }
 .goal-card .cat-learning { background: var(--warn); }
-.goal-card .cat-finance  { background: var(--teal); }
+.goal-card .cat-finance  { background: var(--amber); }
 .goal-card .goal-meta {
   display: inline-flex;
   align-items: center;
@@ -464,7 +464,7 @@ textarea:focus-visible {
 }
 
 /* ============ PAGE HEADER (mobile rhythm) ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .page-header { margin-bottom: var(--sp-6); }
   .page-header h1 { font-size: 24px; }
   .page-header .sub { font-size: 14px; }
@@ -495,12 +495,78 @@ textarea:focus-visible {
   padding: 7px;
 }
 
-/* ============ INSIGHTS — colored module chips ============ */
+/* ============ INSIGHTS — colored module chips ============
+   acc-teal and acc-violet are gone: teal reads as the brand green at chip
+   size and violet is out of the palette entirely. */
 .module-emoji.acc-focus  { background: var(--focus-soft);  border-color: transparent; }
 .module-emoji.acc-ember  { background: var(--ember-soft);  border-color: transparent; }
 .module-emoji.acc-warn   { background: var(--warn-soft);   border-color: transparent; }
 .module-emoji.acc-good   { background: var(--good-soft);   border-color: transparent; }
 .module-emoji.acc-danger { background: var(--danger-soft); border-color: transparent; }
-.module-emoji.acc-violet { background: var(--violet-soft); border-color: transparent; }
+.module-emoji.acc-amber  { background: var(--amber-soft);  border-color: transparent; }
 .module-emoji.acc-sky    { background: var(--sky-soft);    border-color: transparent; }
-.module-emoji.acc-teal   { background: var(--teal-soft);   border-color: transparent; }
+.module-emoji.acc-clay   { background: var(--clay-soft);   border-color: transparent; }
+
+/* ================================================================
+   TOUCH DEVICES — affordances that were hover-only
+   ================================================================
+   These three controls were revealed by :hover, which never fires on a
+   phone or tablet. On touch they were not just small, they were
+   INVISIBLE and impossible to reach: you could not delete a focus
+   session, rename a note, or clear a notification. The hover reveal is
+   kept for pointers and overridden here for anything without one. */
+@media (hover: none) {
+  .session-del,
+  .bell-clear-btn { opacity: 1; }
+
+  .folder-item .fi-actions { display: inline-flex; }
+
+  /* keep the icons optically small inside the bigger tap box */
+  .bell-clear-btn .nav-icon { width: 14px; height: 14px; }
+  .fi-actions .nav-icon { width: 14px !important; height: 14px; }
+  .session-del .nav-icon { width: 14px; height: 14px; }
+}
+
+/* ================================================================
+   MOBILE TOUCH TARGETS — 44px minimum
+   ================================================================
+   Scoped to the phone/tablet range so desktop density is untouched.
+   Sizes are raised to 44px on the control itself rather than with a
+   pseudo-element, so the real hit area grows. */
+@media (max-width: 768px) {
+  .icon-btn,
+  .project-card-menu,
+  .rail-head button,
+  .fi-actions button,
+  .session-del,
+  .bell-clear-btn,
+  .flow-arrow,
+  .page-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* these are square icon buttons — grow both axes, not just the min */
+  .icon-btn,
+  .project-card-menu,
+  .rail-head button,
+  .fi-actions button,
+  .session-del,
+  .bell-clear-btn,
+  .flow-arrow { width: 44px; height: 44px; }
+
+  /* the icon inside stays its designed size so the control does not
+     look like a 44px icon */
+  .project-card-menu .nav-icon,
+  .rail-head button .nav-icon { width: 16px; height: 16px; }
+
+  /* a 44px box needs the glyph re-centred after the box grew */
+  .session-del,
+  .bell-clear-btn { border-radius: var(--r-md); }
+}
+
+/* Phones: 44px rows everywhere a whole row is the tap target. */
+@media (max-width: 414px) {
+  .folder-item { min-height: 44px; }
+  .session-row { min-height: 44px; }
+}

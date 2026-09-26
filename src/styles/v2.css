@@ -36,7 +36,7 @@
 .empty-state p { font-size: var(--fs-sm); }
 
 /* Mobile: filter rows scroll horizontally instead of squeezing */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .filter-bar {
     display: flex !important;
     gap: var(--sp-3);
@@ -132,7 +132,7 @@
 }
 .hero-fill {
   height: 100%;
-  background: linear-gradient(90deg, #FFFFFF, #D9F2EE);
+  background: var(--grad-fill);
   border-radius: var(--r-full);
   transition: width var(--dur-slow) var(--ease);
   min-width: 10px;          /* a 0% bar should still read as a bar */
@@ -151,18 +151,18 @@
   white-space: nowrap;
 }
 .hero-stat b { font-family: var(--font-mono); font-weight: 600; color: var(--grad-ink); }
-/* overdue is the one stat that should pull the eye. Note the chip is only a
-   16% amber wash: raising the alpha lightens the fill and pushes the label
-   back under 4.5:1. */
+/* overdue is the one stat that should pull the eye. The wash is pale amber
+   on a pale green card, so the label has to go DARKER, not lighter — a
+   cream number here would drop under 4.5:1. */
 .hero-stat-warn {
-  color: var(--grad-ink);
-  background: rgba(255, 214, 170, 0.16);
-  border-color: rgba(255, 214, 170, 0.42);
+  color: var(--grad-warn-ink);
+  background: var(--grad-warn-bg);
+  border-color: var(--grad-warn-line);
 }
-.hero-stat-warn b { color: #FFF3E0; }
+.hero-stat-warn b { color: var(--grad-warn-ink); }
 
 /* --- two-column hero (>=900px): text left, progress right --- */
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .home-hero-body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
@@ -214,7 +214,9 @@
   transition: all var(--dur-quick) var(--ease);
 }
 .flow-dot-v2.passed { background: var(--grad-dot-passed); }
-.flow-dot-v2.active { width: 22px; background: #FFFFFF; }
+/* a white pill on a pale green card is invisible, so "where am I" is carried
+   by a solid deep-green pill instead (5.13:1 on the darkest stop) */
+.flow-dot-v2.active { width: 22px; background: var(--grad-dot-active); }
 
 /* On a wide screen the stacked full-width buttons waste the row — the primary
    action should not be a 700px-wide target. Pair them up and cap the width. */
@@ -226,9 +228,6 @@
   }
   .now-actions-v2 .btn { width: auto; flex: 1 1 200px; max-width: 320px; }
 }
-.flow-dot-v2 { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.28); }
-.flow-dot-v2.passed { background: rgba(255,255,255,0.58); }
-.flow-dot-v2.active { background: #FFFFFF; width: 18px; border-radius: var(--r-full); }
 
 /* --- generic home sections --- */
 .home-section { margin-bottom: var(--sp-5); }
@@ -731,14 +730,14 @@
 .cal-block-time { font-family: var(--font-mono); font-size: 12px; opacity: 0.75; }
 
 /* ============ RESPONSIVE ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .hero-stats { gap: var(--sp-2); }
   .weeksnap-grid { grid-template-columns: repeat(2, 1fr); }
   .sumchips { grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
   .focus-stats-row { gap: var(--sp-2); }
   .now-actions-v2 { flex-direction: column; }
 }
-@media (min-width: 721px) {
+@media (min-width: 769px) {
   .home-grid-v2 {
     display: grid;
     grid-template-columns: 1.35fr 1fr;
@@ -929,7 +928,7 @@
 .change-module .ai-line { border-bottom: 1px solid var(--hairline); }
 .change-module .ai-line:last-child { border-bottom: none; }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .score-hero { flex-direction: column; text-align: center; }
   .score-meta { align-items: center; }
   .summary-chips { grid-template-columns: repeat(2, 1fr); }
@@ -1521,7 +1520,7 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 .card h2, .section-head h2 { letter-spacing: -0.01em; }
 
 /* Comfortable touch targets on mobile */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .btn { min-height: 44px; }
   .btn.btn-sm { min-height: 38px; }
   .filter-select, .note-search { min-height: 44px; font-size: 15px; }
@@ -1539,7 +1538,7 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 .goal-card-top .icon-btn { flex-shrink: 0; }
 .goal-card-top { overflow: visible; }
 .goal-card { overflow: visible; }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   /* Action-sheet feel: buttons stack full-width and stay reachable */
   .panel-actions { flex-direction: column-reverse; }
   .panel-actions .btn { width: 100%; justify-content: center; }
@@ -1565,7 +1564,7 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
   width: max-content;
   min-width: 100%;
 }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .heat-scroller .hour-heat {
     grid-template-columns: repeat(24, 22px);
     height: 40px;
@@ -1689,27 +1688,30 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 .progress-track-slim { height: 4px; background: var(--hairline); border-radius: var(--r-full); overflow: hidden; }
 .progress-fill-slim { height: 100%; background: var(--focus); border-radius: var(--r-full); transition: width 0.3s ease; }
 
-/* ============ HOME: NOW CARD META (cleaner) ============ */
+/* ============ HOME: NOW CARD META (cleaner) ============
+   The now-card is a LIGHT green gradient, so these priority hues have to be
+   the dark --grad-prio-* set. The old light values (#FF8A80 etc.) were tuned
+   for the old dark violet card and drop under 4.5:1 here. */
 .now-card .now-meta-row { gap: var(--sp-3); flex-wrap: wrap; }
-.now-card .now-meta-row .prio-urgent { color: #FF8A80; }
-.now-card .now-meta-row .prio-high   { color: #F4A27A; }
-.now-card .now-meta-row .prio-medium { color: #F4C07A; }
-.now-card .now-meta-row .prio-low    { color: #C9C5BC; }
+.now-card .now-meta-row .prio-urgent { color: var(--grad-prio-urgent); }
+.now-card .now-meta-row .prio-high   { color: var(--grad-prio-high); }
+.now-card .now-meta-row .prio-medium { color: var(--grad-prio-medium); }
+.now-card .now-meta-row .prio-low    { color: var(--grad-prio-low); }
 .now-card .now-meta-row .prio-urgent, .now-card .now-meta-row .prio-high,
 .now-card .now-meta-row .prio-medium, .now-card .now-meta-row .prio-low {
   font-weight: 700;
   padding: 2px 9px;
   border-radius: var(--r-full);
-  /* dark pill, not a white wash: keeps the 4 priority hues distinguishable
-     AND holds every one of them at AA against all five gradient stops */
-  background: rgba(0,0,0,0.30);
+  /* light chip: a dark pill would drag the fill down and crush the label */
+  background: var(--grad-chip);
+  border: 1px solid var(--grad-line);
 }
 .meta-chip {
   display: inline-flex; align-items: center;
   font-weight: 600;
 }
-.meta-chip.overdue { color: #FF8A80; }
-.meta-chip.due { color: #F4C07A; }
+.meta-chip.overdue { color: var(--grad-prio-urgent); }
+.meta-chip.due { color: var(--grad-prio-medium); }
 
 /* ============ HOME HABIT CHIPS (info-only, two lines) ============ */
 .habit-chip {
@@ -1865,7 +1867,7 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 /* ============ NOTES MOBILE POLISH ============ */
 .folder-rail { flex-wrap: nowrap; }
 .note-reader-body p, .note-reader-body li { overflow-wrap: anywhere; word-break: break-word; }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .note-row-title { font-size: 17px; }
   .note-row-date { font-size: 13px; }
   .reader-title { font-size: 27px; }
@@ -1879,7 +1881,7 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 }
 
 /* ============ MOBILE UI OVERHAUL — root-cause fixes ============ */
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   /* --- BULLETPROOF: prevent ANY horizontal overflow --- */
   html, body, #app, .app, .main-wrap, .view, .topbar { overflow-x: hidden; }
   .view { max-width: 100vw; width: 100%; }

@@ -2,7 +2,7 @@
 // NEXORA SERVICE WORKER — offline-first app shell
 // ============================================================
 
-const CACHE = "nexora-cache-v8";
+const CACHE = "nexora-cache-v9";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(self.skipWaiting());

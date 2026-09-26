@@ -195,7 +195,7 @@
 .auth-register-fields.visible { display: flex; flex-direction: column; gap: var(--sp-4); }
 
 /* ===================== AUTH PAGE (responsive) ===================== */
-@media (max-width: 560px) {
+@media (max-width: 414px) {
   .auth-card {
     padding: var(--sp-8) var(--sp-5);
     border-radius: var(--r-md);

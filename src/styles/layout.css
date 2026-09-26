@@ -183,7 +183,7 @@ html.dark .topbar { background: rgba(18,18,18,0.92); }
 }
 
 /* ===================== RESPONSIVE ===================== */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .sidebar { display: none; }
   .only-mobile { display: inline-flex; }
   .only-desktop { display: none; }
@@ -238,7 +238,7 @@ html.dark .topbar { background: rgba(18,18,18,0.92); }
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 414px) {
   .view { padding-left: var(--sp-4); padding-right: var(--sp-4); }
 }
 

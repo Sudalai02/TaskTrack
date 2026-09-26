@@ -114,16 +114,22 @@
   flex-wrap: wrap;
 }
 /* Scoped to the card, not the wrapper, so every button inside is covered
-   (.now-actions, .now-actions-v2 and the flow-nav "Next" all live here). */
-.now-card .btn-primary { background: #FFFFFF; color: var(--grad-cta-ink); border-color: #FFFFFF; }
-.now-card .btn-primary:hover { background: #EDEAF7; border-color: #EDEAF7; }
+   (.now-actions, .now-actions-v2 and the flow-nav "Next" all live here).
+   The card is LIGHT green, so a white button is only 1.28:1 against it and
+   disappears. The primary is deep green with a white label instead. */
+.now-card .btn-primary {
+  background: var(--grad-cta-bg);
+  color: var(--grad-cta-ink);
+  border-color: var(--grad-cta-line);
+}
+.now-card .btn-primary:hover { background: var(--grad-cta-line); border-color: var(--grad-cta-line); }
 .now-card .btn-secondary {
   background: var(--grad-chip);
-  border-color: var(--grad-line);
+  border-color: var(--grad-cta-line);
   color: var(--grad-ink);
 }
-.now-card .btn-secondary:hover { background: rgba(255,255,255,0.22); }
-.now-card .btn-ghost { color: var(--grad-ink-soft); }
+.now-card .btn-secondary:hover { background: var(--grad-chip-hover); }
+.now-card .btn-ghost { color: var(--grad-ghost-ink); }
 .now-card .btn-ghost:hover { background: var(--grad-chip); color: var(--grad-ink); }
 
 /* --- Top 3 priorities --- */
@@ -411,7 +417,7 @@
 .switch.on::after { transform: translateX(16px); }
 
 /* ===================== RESPONSIVE PAGE ADAPTS ===================== */
-@media (max-width: 1000px) {
+@media (max-width: 1023px) {
   .home-grid { grid-template-columns: 1fr; }
   .insight-grid { grid-template-columns: 1fr 1fr; }
   .settings-layout { grid-template-columns: 1fr; }
@@ -419,7 +425,7 @@
   .settings-row > * { min-width: 0; }
   .notes-layout { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .now-card { padding: var(--sp-6); }
   .now-task { font-size: 24px; }
   .insight-grid { grid-template-columns: 1fr; }
