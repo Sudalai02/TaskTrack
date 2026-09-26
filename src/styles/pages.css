@@ -23,24 +23,30 @@
   align-items: start;
 }
 
-/* --- Signature element: What should I do now --- */
+/* --- Signature element: What should I do now ---
+   Padding is fluid so this card scales with the viewport instead of jumping
+   from 32px to 20px at the 720px breakpoint. */
 .now-card {
   background: var(--grad-now);
-  border-radius: 18px;
-  padding: var(--sp-8);
+  border-radius: 22px;
+  padding: clamp(20px, 3.4vw, 34px);
   color: var(--grad-ink);
   position: relative;
   overflow: hidden;
   margin-bottom: var(--sp-6);
   max-width: 100%;
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
 }
 .now-card::before {
   content: "";
   position: absolute;
-  top: -40%; right: -15%;
-  width: 380px; height: 380px;
+  top: -45%; right: -16%;
+  width: clamp(240px, 32vw, 400px);
+  height: clamp(240px, 32vw, 400px);
   background: radial-gradient(circle, var(--grad-glow) 0%, transparent 70%);
   pointer-events: none;
+  z-index: 0;
 }
 .now-eyebrow {
   display: flex;

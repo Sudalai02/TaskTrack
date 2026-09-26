@@ -23,11 +23,13 @@ img, svg { display: block; max-width: 100%; }
 /* Numbers/timers always monospace */
 .num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
-/* Focus visibility — accessibility floor */
+/* Focus visibility — accessibility floor
+   No border-radius here on purpose: setting it would override the focused
+   element's OWN radius, so tabbing onto a 16px card would snap it to 6px.
+   `outline` follows the element's border-radius natively. */
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
-  border-radius: var(--r-sm);
 }
 
 ::selection { background: var(--focus-soft); color: var(--ink); }
@@ -36,7 +38,10 @@ img, svg { display: block; max-width: 100%; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
   }
 }
 

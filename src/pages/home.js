@@ -311,18 +311,22 @@ export async function renderHome(view, alive = () => true) {
   view.innerHTML = `
     <!-- ================= HERO ================= -->
     <div class="home-hero">
-      <div class="home-greet">${greeting()}, ${escapeHtml(name)} 👋</div>
-      <div class="home-date">${fmtDateLong(today)}</div>
-      <div class="home-tagline">${importantCount ? `You have <b>${importantCount}</b> important thing${importantCount === 1 ? "" : "s"} today. Let's make progress.` : "Your day is wide open — a perfect time for deep work."}</div>
+      <div class="home-hero-body">
+        <div class="home-hero-main">
+          <div class="home-greet">${greeting()}, ${escapeHtml(name)} 👋</div>
+          <div class="home-date">${fmtDateLong(today)}</div>
+          <div class="home-tagline">${importantCount ? `You have <b>${importantCount}</b> important thing${importantCount === 1 ? "" : "s"} today. Let's make progress.` : "Your day is wide open — a perfect time for deep work."}</div>
+        </div>
 
-      <div class="hero-progress">
-        <div class="hero-progress-top"><span>🎯 Today</span><span class="hero-pct">${donePct}%</span></div>
-        <div class="hero-track"><div class="hero-fill" style="width:${donePct}%"></div></div>
-        <div class="hero-stats">
-          <span class="hero-stat">✅ <b>${doneToday}</b>&nbsp;/&nbsp;${Math.max(progressBase, doneToday)} tasks</span>
-          <span class="hero-stat">⏱ <b>${minutesToHuman(stats.todayMin)}</b>&nbsp;focus</span>
-          <span class="hero-stat">🔥 <b>${focusStreakDays}</b>&nbsp;day streak</span>
-          ${overdueTasks.length ? `<span class="hero-stat hero-stat-warn">⚠ <b>${overdueTasks.length}</b>&nbsp;overdue</span>` : ""}
+        <div class="hero-progress">
+          <div class="hero-progress-top"><span>🎯 Today</span><span class="hero-pct">${donePct}%</span></div>
+          <div class="hero-track"><div class="hero-fill" style="width:${donePct}%"></div></div>
+          <div class="hero-stats">
+            <span class="hero-stat">✅ <b>${doneToday}</b>&nbsp;/&nbsp;${Math.max(progressBase, doneToday)} tasks</span>
+            <span class="hero-stat">⏱ <b>${minutesToHuman(stats.todayMin)}</b>&nbsp;focus</span>
+            <span class="hero-stat">🔥 <b>${focusStreakDays}</b>&nbsp;day streak</span>
+            ${overdueTasks.length ? `<span class="hero-stat hero-stat-warn">⚠ <b>${overdueTasks.length}</b>&nbsp;overdue</span>` : ""}
+          </div>
         </div>
       </div>
     </div>

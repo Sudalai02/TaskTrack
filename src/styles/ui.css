@@ -9,17 +9,11 @@
 /* One tap anywhere, no gray flash on mobile */
 * { -webkit-tap-highlight-color: transparent; }
 
-/* ============ TOKEN REFINEMENT (contrast + calm) ============ */
-:root {
-  --graphite:        #57544D;   /* secondary text — readable at 13px */
-  --graphite-dim:    #77736B;   /* meta text — readable at 11px    */
-  --hairline:        #E8E5E0;
-}
-html.dark {
-  --graphite:        #A6A29A;
-  --graphite-dim:    #949087;   /* must track tokens.css */
-  --hairline:        #3E3E3E;   /* must track tokens.css — charcoal base needs a lighter rule */
-}
+/* ============ TOKENS ============
+   Colour tokens live in tokens.css and are NOT repeated here. This file used
+   to re-declare --graphite / --graphite-dim / --hairline with a "must track
+   tokens.css" comment, which meant every theme change had to be made twice
+   and silently desynced if one was missed. One source of truth now. */
 
 /* ============ TYPOGRAPHY ============ */
 .page-header h1 { letter-spacing: -0.025em; }
@@ -27,12 +21,245 @@ html.dark {
 .section-head h2 { letter-spacing: -0.02em; }
 .form-field label { color: var(--graphite); }
 
+/* ============================================================
+   MISSING COMPONENTS
+   These classes are rendered by JS but had no rule anywhere, so they fell
+   back to browser defaults — most visibly the Insights period filter, which
+   rendered as raw <button>s, and every success toast, which lost its
+   styling because toast() defaults to type "ok".
+   ============================================================ */
+
+/* --- toast variants (toast.js emits toast-ok / toast-err) --- */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(92vw, 420px);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  box-shadow: var(--shadow-lg);
+}
+.toast-ok  { background: var(--ink); color: var(--paper); }
+.toast-err { background: var(--danger-strong); color: #FFFFFF; }
+.toast-ok::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: var(--r-full);
+  background: var(--good);
+  flex: 0 0 auto;
+}
+.toast-err::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: var(--r-full);
+  background: #FFFFFF;
+  flex: 0 0 auto;
+}
+
+/* --- Insights period filter ----------------------------------
+   The pill styles lived under .period-tab, a class no JS renders. The
+   container (.insights-tabs) is styled but the buttons inside it were not,
+   so this is the real control. */
+.insights-tabs { gap: var(--sp-2); flex-wrap: wrap; }
+.filter-btn {
+  border: 1px solid var(--hairline);
+  background: var(--paper-raised);
+  color: var(--graphite);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 8px 16px;
+  min-height: 38px;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: background var(--dur-instant) var(--ease),
+              color var(--dur-instant) var(--ease),
+              border-color var(--dur-instant) var(--ease);
+}
+.filter-btn:hover { background: var(--paper-warm); color: var(--ink); }
+.filter-btn:active { transform: translateY(1px); }
+.filter-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.filter-btn.period-custom-btn { font-style: italic; }
+
+/* --- Home: all-caught-up action row --- */
+.allcaught-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+.allcaught-actions .btn { flex: 1 1 140px; justify-content: center; }
+
+/* --- Home/Insights: briefing eyebrow sits on a gradient-ish card --- */
+.briefing-eyebrow { color: var(--graphite); }
+
+/* --- Calendar: event detail rows --- */
+.event-detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+.event-detail-rows > * + * { border-top: 1px solid var(--hairline); padding-top: var(--sp-2); }
+
+/* --- Goals: section label inside a form (not a .form-field) --- */
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: var(--sp-2);
+}
+
+/* --- page loading state --- */
+.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  min-height: 40vh;
+  color: var(--graphite);
+  font-size: 14px;
+}
+.page-loading .nav-icon { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- Skeletons: for states that take longer than a spinner to explain --- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-2);
+  border-radius: var(--r-sm);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--hairline), transparent);
+  animation: shimmer 1.4s var(--ease) infinite;
+}
+.skeleton-line { height: 12px; margin-bottom: var(--sp-2); }
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-80 { width: 80%; }
+.skeleton-card { height: 92px; border-radius: var(--r-lg); }
+@keyframes shimmer { to { transform: translateX(100%); } }
+[aria-busy="true"] { cursor: progress; }
+
 /* ============ BUTTONS / CONTROLS ============ */
-.btn { transition: all 0.12s ease; }
+.btn {
+  transition: background var(--dur-instant) var(--ease),
+              color var(--dur-instant) var(--ease),
+              border-color var(--dur-instant) var(--ease),
+              transform var(--dur-instant) var(--ease);
+}
 .btn:active:not(:disabled) { filter: brightness(0.96); }
 .btn-primary:active:not(:disabled) { filter: brightness(0.9); }
 .seg-btn { min-height: 36px; }
 .seg-control { align-items: stretch; }
+
+/* ============================================================
+   INTERACTION STATES
+   Only :hover was defined for most controls, so keyboard users got no
+   press feedback and nothing looked disabled. This gives every clickable
+   surface the same four states. Pointer-only hover is guarded so touch
+   devices do not get stuck hover styling.
+   ============================================================ */
+@media (hover: hover) {
+  .icon-btn:hover,
+  .menu-item:hover,
+  .nav-item:hover,
+  .chip:hover,
+  .bell-item:hover,
+  .inbox-row:hover,
+  .note-row:hover,
+  .project-card-menu:hover {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+}
+
+/* Press feedback: a 1px settle reads as physical without shifting layout. */
+.icon-btn:active,
+.chip:active,
+.chip-btn:active,
+.menu-item:active,
+.menu-pop-item:active,
+.nav-item:active,
+.bell-item:active,
+.page-btn:active,
+.page-ellipsis:active,
+.seg-btn:active,
+.filter-btn:active,
+.filter-select:active {
+  transform: translateY(1px);
+}
+
+/* Focus: outline comes from the global :focus-visible in base.css. These
+   rules only stop the control from looking focused when it is not. */
+.icon-btn:focus:not(:focus-visible),
+.menu-item:focus:not(:focus-visible),
+.nav-item:focus:not(:focus-visible),
+.chip:focus:not(:focus-visible),
+.bell-item:focus:not(:focus-visible),
+.inbox-row:focus:not(:focus-visible),
+.page-btn:focus:not(:focus-visible),
+.seg-btn:focus:not(:focus-visible),
+.filter-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Disabled: one look everywhere — dimmed, desaturated, not clickable. */
+.btn:disabled,
+.page-btn:disabled,
+.filter-btn:disabled,
+.icon-btn:disabled,
+.chip:disabled,
+.seg-btn:disabled,
+.filter-select:disabled,
+.menu-item:disabled,
+.nav-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+.filter-select:disabled {
+  background: var(--paper-2);
+  color: var(--graphite-dim);
+}
+
+/* --- checkbox: one size, two class names ---------------------
+   tasks.js used .check-lg (22px) and projects.js used .check (19px), so the
+   same control rendered at two sizes on two pages. Both are 22px now. */
+.check,
+.check-lg {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 2px solid var(--hairline-strong);
+  flex-shrink: 0;
+  transition: background var(--dur-instant) var(--ease),
+              border-color var(--dur-instant) var(--ease);
+}
+.check:hover,
+.check-lg:hover { border-color: var(--focus); }
+
+/* --- select: give it a real focus ring, it had none --- */
+.filter-select:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
 
 /* ============ CARDS (softer, consistent radius) ============ */
 .card { border-radius: 16px; }

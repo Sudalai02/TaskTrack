@@ -54,30 +54,61 @@
   .page-title-row { flex-wrap: wrap; }
 }
 
-/* ============ HOME COMMAND CENTER ============ */
+/* ============ HOME COMMAND CENTER ============
+   The hero is a wide, short band, so it must earn its width: padding is
+   fluid, and from 900px up the greeting and the progress block sit in two
+   columns instead of leaving the right half empty. */
 .home-hero {
   position: relative;
-  border-radius: 20px;
-  padding: var(--sp-5);
+  border-radius: 22px;
+  padding: clamp(20px, 3.4vw, 34px);
   color: var(--grad-ink);
   background: var(--grad-hero);
   overflow: hidden;
   margin-bottom: var(--sp-5);
   max-width: 100%;
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
 }
+/* soft light bloom, top-right */
 .home-hero::after {
   content: "";
   position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 320px;
-  height: 320px;
+  top: -55%;
+  right: -18%;
+  width: clamp(240px, 34vw, 420px);
+  height: clamp(240px, 34vw, 420px);
   background: radial-gradient(circle, var(--grad-glow) 0%, transparent 70%);
   pointer-events: none;
+  z-index: 0;
 }
-.home-greet { font-size: 26px; font-weight: 600; line-height: 1.2; position: relative; }
-.home-date { font-size: 13.5px; color: var(--grad-ink-dim); margin-top: 3px; position: relative; }
-.home-tagline { font-size: 14px; color: var(--grad-ink-soft); margin-top: var(--sp-2); position: relative; }
+/* the two columns only exist once there is room for them */
+.home-hero-body {
+  position: relative;
+  z-index: 1;
+}
+.home-greet {
+  font-family: var(--font-display);
+  font-size: clamp(25px, 3.6vw, 36px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+.home-date {
+  font-size: 13.5px;
+  color: var(--grad-ink-dim);
+  margin-top: 5px;
+  position: relative;
+}
+.home-tagline {
+  font-size: clamp(14px, 1.2vw, 15.5px);
+  color: var(--grad-ink-soft);
+  margin-top: var(--sp-3);
+  max-width: 46ch;          /* stops the line stretching across a wide card */
+  position: relative;
+}
+.home-tagline b { color: var(--grad-ink); font-weight: 700; }
 
 .hero-progress { position: relative; margin-top: var(--sp-5); }
 .hero-progress-top {
@@ -91,10 +122,22 @@
   text-transform: uppercase;
   color: var(--grad-ink-dim);
 }
-.hero-pct { font-family: var(--font-mono); font-size: 20px; color: var(--grad-ink); letter-spacing: 0; }
-.hero-track { height: 10px; background: rgba(255,255,255,0.20); border-radius: var(--r-full); overflow: hidden; }
-.hero-fill { height: 100%; background: linear-gradient(90deg, #FFFFFF, #D9F2EE); border-radius: var(--r-full); transition: width 0.4s ease; }
-.hero-stats { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); margin-top: var(--sp-4); position: relative; }
+.hero-pct { font-family: var(--font-mono); font-size: clamp(20px, 2.2vw, 26px); color: var(--grad-ink); letter-spacing: -0.02em; }
+.hero-track {
+  height: 10px;
+  background: var(--grad-track);
+  border-radius: var(--r-full);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.18);
+}
+.hero-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFFFFF, #D9F2EE);
+  border-radius: var(--r-full);
+  transition: width var(--dur-slow) var(--ease);
+  min-width: 10px;          /* a 0% bar should still read as a bar */
+}
+.hero-stats { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-3); margin-top: var(--sp-4); position: relative; }
 .hero-stat {
   display: inline-flex;
   align-items: center;
@@ -105,13 +148,54 @@
   border: 1px solid var(--grad-line);
   padding: 6px 11px;
   border-radius: var(--r-full);
+  white-space: nowrap;
 }
-.hero-stat b { font-family: var(--font-mono); font-weight: 500; color: var(--grad-ink); }
+.hero-stat b { font-family: var(--font-mono); font-weight: 600; color: var(--grad-ink); }
+/* overdue is the one stat that should pull the eye. Note the chip is only a
+   16% amber wash: raising the alpha lightens the fill and pushes the label
+   back under 4.5:1. */
+.hero-stat-warn {
+  color: var(--grad-ink);
+  background: rgba(255, 214, 170, 0.16);
+  border-color: rgba(255, 214, 170, 0.42);
+}
+.hero-stat-warn b { color: #FFF3E0; }
+
+/* --- two-column hero (>=900px): text left, progress right --- */
+@media (min-width: 900px) {
+  .home-hero-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+    column-gap: clamp(32px, 4vw, 64px);
+    align-items: start;
+  }
+  .home-hero-main { min-width: 0; }
+  .hero-progress {
+    margin-top: 0;
+    padding: clamp(16px, 1.8vw, 22px);
+    background: var(--grad-chip);
+    border: 1px solid var(--grad-line);
+    border-radius: var(--r-lg);
+  }
+  .hero-stats { margin-top: var(--sp-3); gap: var(--sp-2); }
+  .hero-stat { font-size: 12.5px; padding: 5px 10px; }
+}
 
 /* --- DO THIS NOW slider --- */
 .now-card-v2 { margin-bottom: var(--sp-5); }
-.now-card-v2 .now-task { font-size: clamp(22px, 6vw, 30px); max-width: none; }
-.now-actions-v2 { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-4); position: relative; }
+.now-card-v2 .now-task {
+  font-size: clamp(21px, 4.4vw, 30px);
+  max-width: none;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+}
+.now-actions-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  position: relative;
+}
 .now-actions-v2 .btn { width: 100%; justify-content: center; }
 .flow-nav-v2 {
   display: flex;
@@ -123,6 +207,25 @@
 }
 .flow-counter-v2 { font-family: var(--font-mono); font-size: 12px; color: var(--grad-ink-dim); }
 .flow-dots-v2 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+/* the flow dots are a -v2 class, so the base .flow-dot rules never reach them */
+.flow-dot-v2 {
+  width: 7px; height: 7px; border-radius: var(--r-full);
+  background: var(--grad-dot);
+  transition: all var(--dur-quick) var(--ease);
+}
+.flow-dot-v2.passed { background: var(--grad-dot-passed); }
+.flow-dot-v2.active { width: 22px; background: #FFFFFF; }
+
+/* On a wide screen the stacked full-width buttons waste the row — the primary
+   action should not be a 700px-wide target. Pair them up and cap the width. */
+@media (min-width: 640px) {
+  .now-actions-v2 {
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+  .now-actions-v2 .btn { width: auto; flex: 1 1 200px; max-width: 320px; }
+}
 .flow-dot-v2 { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.28); }
 .flow-dot-v2.passed { background: rgba(255,255,255,0.58); }
 .flow-dot-v2.active { background: #FFFFFF; width: 18px; border-radius: var(--r-full); }
@@ -705,9 +808,11 @@
   text-align: center;
   white-space: nowrap;
 }
-.score-delta.up { background: rgba(58, 125, 68, 0.12); color: var(--good); }
-.score-delta.down { background: rgba(192, 57, 43, 0.1); color: var(--danger); }
-.score-delta.flat { background: var(--paper-warm); color: var(--graphite); }
+/* These used to hardcode a retired green/red pair; --good-soft / --danger-soft
+   keep the wash in step with the token palette in both themes. */
+.score-delta.up   { background: var(--good-soft);   color: var(--good); }
+.score-delta.down { background: var(--danger-soft); color: var(--danger); }
+.score-delta.flat { background: var(--paper-warm);   color: var(--graphite); }
 .score-parts { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 
 .summary-chips {
@@ -786,7 +891,9 @@
 .risk-name { flex: 1; font-size: 13.5px; font-weight: 500; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .risk-row b.num { font-size: 12.5px; color: var(--graphite); flex-shrink: 0; }
 .allclear-line { font-size: 13.5px; color: var(--graphite); padding: var(--sp-3) 0 0; }
-.risk-module { border-color: rgba(192, 57, 43, 0.25); }
+/* was rgba(192,57,43,.25) — a leftover from the retired red. color-mix keeps
+   the border in step with --danger in both themes. */
+.risk-module { border-color: color-mix(in srgb, var(--danger) 28%, transparent); }
 
 .focus-hours-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-bottom: var(--sp-4); }
 .focus-hours-row > div {
