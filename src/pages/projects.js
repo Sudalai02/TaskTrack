@@ -5,6 +5,7 @@
 // ============================================================
 
 import { icon, fmtDate, priorityDotClass } from "../dom.js";
+import { byDueDate } from "../utils/dates.js";
 import { openForm, confirm } from "../ui/modal.js";
 import { toast } from "../ui/toast.js";
 import * as projectService from "../services/projectService.js";
@@ -26,7 +27,7 @@ const listState = {
 const detailState = {
   priority: "all",
   status: "all",
-  sort: "priority",
+  sort: "due",
   page: 1,
 };
 
@@ -373,7 +374,7 @@ async function renderDetail(view, alive, ctx) {
     detailState.projectId = detailId;
     detailState.priority = "all";
     detailState.status = "all";
-    detailState.sort = "priority";
+    detailState.sort = "due";
     detailState.page = 1;
   }
 
@@ -383,16 +384,20 @@ async function renderDetail(view, alive, ctx) {
     if (detailState.status !== "all") list = list.filter((t) => t.status === detailState.status);
     switch (detailState.sort) {
       case "due":
-        list.sort((a, b) => (a.dueDate || "9999").localeCompare(b.dueDate || "9999"));
+        list.sort(byDueDate);
         break;
       case "az":
-        list.sort((a, b) => a.title.localeCompare(b.title));
+        list.sort((a, b) => a.title.localeCompare(b.title) || byDueDate(a, b));
         break;
       case "created":
-        list.sort((a, b) => ((a.createdAt || "") < (b.createdAt || "") ? 1 : -1));
+        list.sort((a, b) => {
+          const ca = a.createdAt || "";
+          const cb = b.createdAt || "";
+          return ca !== cb ? (cb < ca ? -1 : 1) : byDueDate(a, b);
+        });
         break;
       default:
-        list.sort((a, b) => b._score - a._score);
+        list.sort((a, b) => b._score - a._score || byDueDate(a, b));
     }
     return list;
   }
@@ -454,8 +459,8 @@ async function renderDetail(view, alive, ctx) {
           <label>Sort by</label>
           <select class="filter-select" id="dt-sort">
             ${[
-              ["priority", "Priority score"],
               ["due", "Due date"],
+              ["priority", "Priority score"],
               ["created", "Recently added"],
               ["az", "A → Z"],
             ].map(([v, l]) => `<option value="${v}" ${detailState.sort === v ? "selected" : ""}>${l}</option>`).join("")}

@@ -27,6 +27,29 @@ export function diffDays(a, b) {
   return Math.round((fromISO(b) - fromISO(a)) / 86400000);
 }
 
+// Sortable number for a due date. Missing or unparseable values become
+// Infinity so undated tasks sink to the bottom instead of poisoning the
+// comparison with NaN.
+function dueKey(iso) {
+  if (!iso) return Infinity;
+  const t = fromISO(String(iso).slice(0, 10)).getTime();
+  return Number.isNaN(t) ? Infinity : t;
+}
+
+// Canonical task ordering: ascending by real due date, earliest first,
+// undated last. Equal dates break on creation time then id, so the order
+// stays stable across renders instead of falling back to the arbitrary
+// document order the store returns. Always returns -1, 0 or 1.
+export function byDueDate(a, b) {
+  const ka = dueKey(a.dueDate);
+  const kb = dueKey(b.dueDate);
+  if (ka !== kb) return ka < kb ? -1 : 1;
+  const ca = a.createdAt || "";
+  const cb = b.createdAt || "";
+  if (ca !== cb) return ca < cb ? -1 : 1;
+  return String(a.id || "").localeCompare(String(b.id || ""));
+}
+
 // 0 = Sunday … 6 = Saturday
 export function weekdayOf(iso) {
   return fromISO(iso).getDay();

@@ -9,7 +9,7 @@
 // ============================================================
 
 import { icon, priorityLabel, priorityDotClass } from "../dom.js";
-import { fmtDue, todayISO, addDays, startOfWeekISO } from "../utils/dates.js";
+import { fmtDue, todayISO, addDays, startOfWeekISO, byDueDate } from "../utils/dates.js";
 import { openForm } from "../ui/modal.js";
 import { toast } from "../ui/toast.js";
 import * as taskService from "../services/taskService.js";
@@ -27,16 +27,23 @@ const state = {
   goalId: "all", // all | none | <goalId>
   status: "all", // all | Todo | In Progress | Blocked | Completed | Cancelled
   priority: "all", // all | Urgent | High | Medium | Low
-  sort: "priority", // priority | due | created | az | effort
+  sort: "due", // due | priority | created | az | effort
   page: 1,
 };
 
+// Due date leads; every other sort falls back to it on ties so equal
+// keys never reorder rows into arbitrary document order.
 const SORTERS = {
-  priority: (a, b) => b._score - a._score,
-  due: (a, b) => (a.dueDate || "9999").localeCompare(b.dueDate || "9999"),
-  created: (a, b) => (a.createdAt < b.createdAt ? 1 : -1),
-  az: (a, b) => a.title.localeCompare(b.title),
-  effort: (a, b) => (a.estimatedMinutes || 0) - (b.estimatedMinutes || 0),
+  due: byDueDate,
+  priority: (a, b) => b._score - a._score || byDueDate(a, b),
+  // descending, but must return 0 on a tie or the dueDate fallback is skipped
+  created: (a, b) => {
+    const ca = a.createdAt || "";
+    const cb = b.createdAt || "";
+    return ca !== cb ? (cb < ca ? -1 : 1) : byDueDate(a, b);
+  },
+  az: (a, b) => a.title.localeCompare(b.title) || byDueDate(a, b),
+  effort: (a, b) => (a.estimatedMinutes || 0) - (b.estimatedMinutes || 0) || byDueDate(a, b),
 };
 
 const DATE_CHIPS = [
@@ -171,7 +178,7 @@ export async function renderTasks(view, alive = () => true) {
     const bounds = dateRangeBounds();
     if (bounds) list = list.filter((t) => t.dueDate && t.dueDate >= bounds[0] && t.dueDate <= bounds[1]);
 
-    return [...list].sort(SORTERS[state.sort]);
+    return [...list].sort(SORTERS[state.sort] || SORTERS.due);
   }
 
   function draw() {
@@ -242,8 +249,8 @@ export async function renderTasks(view, alive = () => true) {
           <label>Sort by</label>
           <select class="filter-select" id="sort-by">
             ${[
-              ["priority", "Priority score"],
               ["due", "Due date"],
+              ["priority", "Priority score"],
               ["created", "Recently added"],
               ["az", "A → Z"],
               ["effort", "Effort (short first)"],
