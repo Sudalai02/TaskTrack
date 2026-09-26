@@ -35,7 +35,7 @@ export async function createProject(data) {
     goalId: data.goalId || null,
     status: data.status || "Planning",
     deadline: data.deadline || null,
-    color: data.color || "#0F7A4F",
+    color: data.color || "#3D5A80",
     createdAt: new Date().toISOString(),
   };
   await db.put("projects", project);

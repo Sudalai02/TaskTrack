@@ -456,7 +456,7 @@
 .flow-arrow .nav-icon { width: 15px; height: 15px; background-color: currentColor; }
 .rot180 { transform: rotate(180deg); }
 .flow-dots { display: flex; gap: 7px; align-items: center; }
-/* the flow sits on the light green card, so the dots are dark, not white */
+/* the flow sits on the dark green card, so the dots are white */
 .flow-dot {
   width: 7px; height: 7px; border-radius: var(--r-full);
   background: var(--grad-dot); transition: all 0.18s ease;

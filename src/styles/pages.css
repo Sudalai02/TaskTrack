@@ -25,7 +25,7 @@
 
 /* --- Signature element: What should I do now ---
    Padding is fluid so this card scales with the viewport instead of jumping
-   from 32px to 20px at the 720px breakpoint. */
+   from 32px to 20px at the 1024px breakpoint. */
 .now-card {
   background: var(--grad-now);
   border-radius: 22px;
@@ -115,17 +115,18 @@
 }
 /* Scoped to the card, not the wrapper, so every button inside is covered
    (.now-actions, .now-actions-v2 and the flow-nav "Next" all live here).
-   The card is LIGHT green, so a white button is only 1.28:1 against it and
-   disappears. The primary is deep green with a white label instead. */
+   The card is a DARK green gradient, so the primary is the inverse: a solid
+   white button with a deep-green label. That clears 14.9:1 on the label and
+   6.6:1 on the button's own edge against the card. */
 .now-card .btn-primary {
   background: var(--grad-cta-bg);
   color: var(--grad-cta-ink);
   border-color: var(--grad-cta-line);
 }
-.now-card .btn-primary:hover { background: var(--grad-cta-line); border-color: var(--grad-cta-line); }
+.now-card .btn-primary:hover { background: var(--grad-cta-hover); border-color: var(--grad-cta-hover); }
 .now-card .btn-secondary {
   background: var(--grad-chip);
-  border-color: var(--grad-cta-line);
+  border-color: var(--grad-line);
   color: var(--grad-ink);
 }
 .now-card .btn-secondary:hover { background: var(--grad-chip-hover); }

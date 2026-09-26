@@ -87,7 +87,7 @@ export async function runGoalPlanner() {
 
   const project = await projectService.createProject({
     name: input.title.length > 40 ? input.title.slice(0, 40) + "…" : input.title,
-    color: "#B0521F",
+    color: "#C4622D",
     status: "Planning",
     deadline: input.targetDate || "",
     description: `Auto-created workspace for goal “${input.title}”`,
