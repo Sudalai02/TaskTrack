@@ -48,6 +48,21 @@
   --prio-low:      #98958E;
   --prio-low-bg:   #F0EDE8;
 
+  /* ---- Signature gradient cards (home hero · "do this now") ----
+     These two panels are self-contained: they carry their own light ink
+     instead of --ink/--graphite, so one token set renders correctly in
+     both light and dark mode. Every ink below clears WCAG AA (4.5:1)
+     against the lightest gradient stop. */
+  --grad-hero:      linear-gradient(145deg, #4C1D95 0%, #6D28D9 42%, #0B5F58 100%);
+  --grad-now:       linear-gradient(150deg, #0B5F58 0%, #0B5F73 45%, #4338CA 100%);
+  --grad-ink:       #FFFFFF;              /* titles                     7.1:1 */
+  --grad-ink-soft:  #E8E3F7;              /* body, list rows            5.7:1 */
+  --grad-ink-dim:   #D3CCEA;              /* meta, counters             4.6:1 */
+  --grad-line:      rgba(255,255,255,0.20);
+  --grad-chip:      rgba(0,0,0,0.18);    /* dark glass: a white wash washes out light ink */
+  --grad-glow:      rgba(167,139,250,0.32);
+  --grad-cta-ink:   #1A1A2E;              /* text on the white CTA      */
+
   /* ---- Type ---- */
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -98,18 +113,25 @@ html.dark body {
   color-scheme: dark;
 }
 html.dark {
-  /* Pure black page. Surfaces stay a hair above it so cards and
-     menus still read as raised layers instead of vanishing. */
-  --paper:        #000000;
-  --paper-raised: #0D0D0D;
-  --paper-warm:   #161616;
-  --paper-2:      #1F1F1F;
+  /* Neutral charcoal — grey blended into black, no colour cast.
+     Surfaces step up from the page so cards still read as raised. */
+  --paper:        #121212;
+  --paper-raised: #1C1C1C;
+  --paper-warm:   #242424;
+  --paper-2:      #2C2C2C;
   --ink:          #F0EDE8;
   --ink-soft:     #D0CCC4;
   --graphite:     #98958E;
-  --graphite-dim: #706D66;
-  --hairline:     #2E2E2E;
-  --hairline-strong: #3D3D3D;
+  --graphite-dim: #949087;
+  /* On charcoal the rule has to be a real step up, not a near-invisible
+     1.03:1. #3E3E3E clears 1.3:1 on every surface below it. */
+  --hairline:     #3E3E3E;
+  --hairline-strong: #4E4E4E;
+
+  /* Same hues as light mode, one step deeper so the gradients stay rich
+     against charcoal instead of glaring. Ink is unchanged (still AA). */
+  --grad-hero:      linear-gradient(145deg, #3B1673 0%, #5B21B6 42%, #084C46 100%);
+  --grad-now:       linear-gradient(150deg, #084C46 0%, #084C5C 45%, #362BA8 100%);
 
   --focus:        #6B8DB5;
   --focus-soft:   rgba(107,141,181,0.12);

@@ -17,21 +17,24 @@ const sections = [
 
 let active = "account";
 
+const THEME_COLOR_DARK = "#121212";
+const THEME_COLOR_LIGHT = "#FAFAF9";
+
 export function applyTheme(theme) {
   const root = document.documentElement;
   root.classList.remove("dark");
   if (theme === "dark") {
     root.classList.add("dark");
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#000000");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR_DARK);
   } else if (theme === "system") {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       root.classList.add("dark");
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#000000");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR_DARK);
     } else {
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FAFAF9");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR_LIGHT);
     }
   } else {
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FAFAF9");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR_LIGHT);
   }
 }
 

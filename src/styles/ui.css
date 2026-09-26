@@ -17,8 +17,8 @@
 }
 html.dark {
   --graphite:        #A6A29A;
-  --graphite-dim:    #8B877F;
-  --hairline:        #2E2E2E;   /* must track tokens.css — pure-black base needs a lighter rule */
+  --graphite-dim:    #949087;   /* must track tokens.css */
+  --hairline:        #3E3E3E;   /* must track tokens.css — charcoal base needs a lighter rule */
 }
 
 /* ============ TYPOGRAPHY ============ */

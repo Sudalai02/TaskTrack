@@ -25,10 +25,10 @@
 
 /* --- Signature element: What should I do now --- */
 .now-card {
-  background: linear-gradient(155deg, #1B1917 0%, #151413 55%, #1D1A16 100%);
+  background: var(--grad-now);
   border-radius: 18px;
   padding: var(--sp-8);
-  color: #F4F1EC;
+  color: var(--grad-ink);
   position: relative;
   overflow: hidden;
   margin-bottom: var(--sp-6);
@@ -39,7 +39,7 @@
   position: absolute;
   top: -40%; right: -15%;
   width: 380px; height: 380px;
-  background: radial-gradient(circle, rgba(196,98,45,0.28) 0%, rgba(196,98,45,0) 70%);
+  background: radial-gradient(circle, var(--grad-glow) 0%, transparent 70%);
   pointer-events: none;
 }
 .now-eyebrow {
@@ -50,11 +50,11 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ember);
+  color: var(--grad-ink-soft);
   margin-bottom: var(--sp-5);
   position: relative;
 }
-.now-eyebrow .nav-icon { width: 13px; height: 13px; background-color: var(--ember); }
+.now-eyebrow .nav-icon { width: 13px; height: 13px; background-color: currentColor; }
 
 .now-task {
   font-family: var(--font-display);
@@ -70,35 +70,35 @@
   align-items: center;
   gap: var(--sp-4);
   margin-bottom: var(--sp-6);
-  color: #B8B4AC;
+  color: var(--grad-ink-dim);
   font-size: 13px;
   position: relative;
 }
-.now-meta-row .num { color: #F4F1EC; font-weight: 500; }
+.now-meta-row .num { color: var(--grad-ink); font-weight: 500; }
 
 .now-why {
-  border-top: 1px solid rgba(244,241,236,0.14);
+  border-top: 1px solid var(--grad-line);
   padding-top: var(--sp-5);
   margin-bottom: var(--sp-6);
   position: relative;
 }
 .now-why-label {
   font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #8B877E; margin-bottom: 8px;
+  color: var(--grad-ink-dim); margin-bottom: 8px;
 }
 .now-why ul { display: flex; flex-direction: column; gap: 7px; }
 .now-why li {
   display: flex; align-items: flex-start; gap: 8px;
-  font-size: 13px; color: #D8D4CB; line-height: 1.5;
+  font-size: 13px; color: var(--grad-ink-soft); line-height: 1.5;
 }
 .now-why li::before {
   content: "";
   width: 4px; height: 4px; border-radius: 50%;
-  background: var(--ember);
+  background: var(--grad-ink-soft);
   margin-top: 7px; flex-shrink: 0;
 }
 .now-reason {
-  font-size: 13px; line-height: 1.6; color: #D8D4CB;
+  font-size: 13px; line-height: 1.6; color: var(--grad-ink-soft);
   margin: 0;
 }
 
@@ -107,16 +107,18 @@
   position: relative;
   flex-wrap: wrap;
 }
-.now-actions .btn-primary { background: var(--ember); }
-.now-actions .btn-primary:hover { background: #D9793F; }
-.now-actions .btn-secondary {
-  background: rgba(244,241,236,0.08);
-  border-color: rgba(244,241,236,0.16);
-  color: #F4F1EC;
+/* Scoped to the card, not the wrapper, so every button inside is covered
+   (.now-actions, .now-actions-v2 and the flow-nav "Next" all live here). */
+.now-card .btn-primary { background: #FFFFFF; color: var(--grad-cta-ink); border-color: #FFFFFF; }
+.now-card .btn-primary:hover { background: #EDEAF7; border-color: #EDEAF7; }
+.now-card .btn-secondary {
+  background: var(--grad-chip);
+  border-color: var(--grad-line);
+  color: var(--grad-ink);
 }
-.now-actions .btn-secondary:hover { background: rgba(244,241,236,0.14); }
-.now-actions .btn-ghost { color: #B8B4AC; }
-.now-actions .btn-ghost:hover { background: rgba(244,241,236,0.08); color: #F4F1EC; }
+.now-card .btn-secondary:hover { background: rgba(255,255,255,0.22); }
+.now-card .btn-ghost { color: var(--grad-ink-soft); }
+.now-card .btn-ghost:hover { background: var(--grad-chip); color: var(--grad-ink); }
 
 /* --- Top 3 priorities --- */
 .priority-list { display: flex; flex-direction: column; gap: 2px; }

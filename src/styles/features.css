@@ -94,7 +94,9 @@
 .project-card-color { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 3px 3px 0 0; }
 .project-card-top-right { display: flex; align-items: flex-start; gap: var(--sp-2); margin-left: var(--sp-3); }
 .project-card-menu { flex: 0 0 auto; height: 28px; width: 28px; color: var(--graphite-dim); }
-.project-card-menu:hover { color: var(--graphite); background: var(--paper-dark); }
+/* --paper-2 is the one-step-off-base-surface token: darker than the card in
+   light mode, lighter in dark. (Was --paper-dark, which was never declared.) */
+.project-card-menu:hover { color: var(--graphite); background: var(--paper-2); }
 .project-card-name-wrap { min-width: 0; }
 
 /* Project detail */
@@ -430,9 +432,9 @@
 .flow-type-badge {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: #B8B4AC;
+  text-transform: uppercase; color: var(--grad-ink-soft);
 }
-.flow-counter { font-family: var(--font-mono); font-size: 11.5px; color: #8F8B84; }
+.flow-counter { font-family: var(--font-mono); font-size: 11.5px; color: var(--grad-ink-dim); }
 .now-card#flow-card { display: flex; flex-direction: column; }
 #flow-stage {
   position: relative; min-height: 240px;
@@ -444,27 +446,27 @@
 }
 .flow-arrow {
   width: 38px; height: 38px; border-radius: var(--r-full);
-  border: 1px solid rgba(244,241,236,0.25); background: transparent;
-  color: #F4F1EC; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--grad-line); background: transparent;
+  color: var(--grad-ink); display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.12s ease;
 }
-.flow-arrow:hover { background: rgba(244,241,236,0.12); }
+.flow-arrow:hover { background: var(--grad-chip); }
 .flow-arrow:disabled { opacity: 0.25; cursor: default; }
 .flow-arrow .nav-icon { width: 15px; height: 15px; background-color: currentColor; }
 .rot180 { transform: rotate(180deg); }
 .flow-dots { display: flex; gap: 7px; align-items: center; }
 .flow-dot {
   width: 7px; height: 7px; border-radius: var(--r-full);
-  background: rgba(244,241,236,0.28); transition: all 0.18s ease;
+  background: rgba(255,255,255,0.30); transition: all 0.18s ease;
 }
-.flow-dot.passed { background: rgba(244,241,236,0.55); }
+.flow-dot.passed { background: rgba(255,255,255,0.58); }
 .flow-dot.active {
-  width: 22px; background: #F4F1EC;
+  width: 22px; background: #FFFFFF;
 }
 .flow-eyebrow {
   display: inline-flex; align-items: center; gap: 7px;
   font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: #B8B4AC;
+  text-transform: uppercase; color: var(--grad-ink-soft);
 }
 .flow-eyebrow .nav-icon { width: 13px; height: 13px; background-color: currentColor; }
 .allcaught-card {

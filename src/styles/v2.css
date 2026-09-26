@@ -59,8 +59,8 @@
   position: relative;
   border-radius: 20px;
   padding: var(--sp-5);
-  color: #F4F1EC;
-  background: linear-gradient(150deg, #1D1B18 0%, #151413 60%, #201B16 100%);
+  color: var(--grad-ink);
+  background: var(--grad-hero);
   overflow: hidden;
   margin-bottom: var(--sp-5);
   max-width: 100%;
@@ -72,12 +72,12 @@
   right: -20%;
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(196,98,45,0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--grad-glow) 0%, transparent 70%);
   pointer-events: none;
 }
 .home-greet { font-size: 26px; font-weight: 600; line-height: 1.2; position: relative; }
-.home-date { font-size: 13.5px; color: #A8A49C; margin-top: 3px; position: relative; }
-.home-tagline { font-size: 14px; color: #CFCBC2; margin-top: var(--sp-2); position: relative; }
+.home-date { font-size: 13.5px; color: var(--grad-ink-dim); margin-top: 3px; position: relative; }
+.home-tagline { font-size: 14px; color: var(--grad-ink-soft); margin-top: var(--sp-2); position: relative; }
 
 .hero-progress { position: relative; margin-top: var(--sp-5); }
 .hero-progress-top {
@@ -89,24 +89,24 @@
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #8F8B84;
+  color: var(--grad-ink-dim);
 }
-.hero-pct { font-family: var(--font-mono); font-size: 20px; color: #F4F1EC; letter-spacing: 0; }
-.hero-track { height: 10px; background: rgba(244,241,236,0.14); border-radius: var(--r-full); overflow: hidden; }
-.hero-fill { height: 100%; background: linear-gradient(90deg, var(--ember), #E08B4F); border-radius: var(--r-full); transition: width 0.4s ease; }
+.hero-pct { font-family: var(--font-mono); font-size: 20px; color: var(--grad-ink); letter-spacing: 0; }
+.hero-track { height: 10px; background: rgba(255,255,255,0.20); border-radius: var(--r-full); overflow: hidden; }
+.hero-fill { height: 100%; background: linear-gradient(90deg, #FFFFFF, #D9F2EE); border-radius: var(--r-full); transition: width 0.4s ease; }
 .hero-stats { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); margin-top: var(--sp-4); position: relative; }
 .hero-stat {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #D8D4CB;
-  background: rgba(244,241,236,0.07);
-  border: 1px solid rgba(244,241,236,0.12);
+  color: var(--grad-ink-soft);
+  background: var(--grad-chip);
+  border: 1px solid var(--grad-line);
   padding: 6px 11px;
   border-radius: var(--r-full);
 }
-.hero-stat b { font-family: var(--font-mono); font-weight: 500; color: #F4F1EC; }
+.hero-stat b { font-family: var(--font-mono); font-weight: 500; color: var(--grad-ink); }
 
 /* --- DO THIS NOW slider --- */
 .now-card-v2 { margin-bottom: var(--sp-5); }
@@ -121,11 +121,11 @@
   margin-top: var(--sp-4);
   position: relative;
 }
-.flow-counter-v2 { font-family: var(--font-mono); font-size: 12px; color: #8F8B84; }
+.flow-counter-v2 { font-family: var(--font-mono); font-size: 12px; color: var(--grad-ink-dim); }
 .flow-dots-v2 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.flow-dot-v2 { width: 7px; height: 7px; border-radius: 50%; background: rgba(244,241,236,0.22); }
-.flow-dot-v2.passed { background: rgba(244,241,236,0.55); }
-.flow-dot-v2.active { background: var(--ember); width: 18px; border-radius: var(--r-full); }
+.flow-dot-v2 { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.28); }
+.flow-dot-v2.passed { background: rgba(255,255,255,0.58); }
+.flow-dot-v2.active { background: #FFFFFF; width: 18px; border-radius: var(--r-full); }
 
 /* --- generic home sections --- */
 .home-section { margin-bottom: var(--sp-5); }
@@ -1582,12 +1582,6 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 .progress-track-slim { height: 4px; background: var(--hairline); border-radius: var(--r-full); overflow: hidden; }
 .progress-fill-slim { height: 100%; background: var(--focus); border-radius: var(--r-full); transition: width 0.3s ease; }
 
-/* ============ HOME: IMPROVED CONTRAST ============ */
-html.dark .home-date { color: #B8B4AC; }
-html.dark .home-tagline { color: #D8D4CB; }
-html.dark .hero-progress-top { color: #A8A49C; }
-html.dark .hero-stat { color: #E0DCD4; }
-
 /* ============ HOME: NOW CARD META (cleaner) ============ */
 .now-card .now-meta-row { gap: var(--sp-3); flex-wrap: wrap; }
 .now-card .now-meta-row .prio-urgent { color: #FF8A80; }
@@ -1599,7 +1593,9 @@ html.dark .hero-stat { color: #E0DCD4; }
   font-weight: 700;
   padding: 2px 9px;
   border-radius: var(--r-full);
-  background: rgba(244,241,236,0.08);
+  /* dark pill, not a white wash: keeps the 4 priority hues distinguishable
+     AND holds every one of them at AA against all five gradient stops */
+  background: rgba(0,0,0,0.30);
 }
 .meta-chip {
   display: inline-flex; align-items: center;
@@ -1873,21 +1869,14 @@ html.dark .hero-stat { color: #E0DCD4; }
   /* --- Print-friendly overrides removed for screen --- */
 }
 
-/* ============ DARK MODE — HARDCODED COLOR OVERRIDES ============ */
-html.dark .home-hero {
-  background: linear-gradient(150deg, #0B0B0B 0%, #000000 60%, #0A0806 100%);
-}
-html.dark .home-hero::after {
-  background: radial-gradient(circle, rgba(216,120,64,0.2) 0%, transparent 70%);
-}
+/* ============ DARK MODE — HARDCODED COLOR OVERRIDES ============
+   .home-hero / .now-card need no entry: their gradients come from
+   --grad-hero / --grad-now, which are redefined per mode in tokens.css. */
 html.dark .ai-insight-banner {
-  background: linear-gradient(140deg, #0B0B0B 0%, #121212 100%);
+  background: linear-gradient(140deg, #1C1C1C 0%, #242424 100%);
   border-color: var(--hairline);
 }
-html.dark .bell-item.unread { background: #0D0D0D; }
-html.dark .now-card {
-  background: linear-gradient(155deg, #0B0B0B 0%, #000000 55%, #0A0806 100%);
-}
+html.dark .bell-item.unread { background: #1C1C1C; }
 html.dark .focus-ring {
   background: conic-gradient(var(--focus) 0deg 245deg, var(--hairline) 245deg 360deg);
 }
