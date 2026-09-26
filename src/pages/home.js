@@ -31,6 +31,7 @@ import {
   fmtDateLong,
   todayISO,
   addDays,
+  byDueDate,
 } from "../utils/dates.js";
 import { toast } from "../ui/toast.js";
 
@@ -71,10 +72,10 @@ async function buildFlow({ tasks, habitList, todayEvents, logsToday, goals, proj
   const OPEN = ["Completed", "Cancelled"];
   const items = [];
 
-  // 1 · Overdue tasks first (they ARE the deadlines)
+  // 1 · Overdue tasks first (they ARE the deadlines), worst breach first
   const overdue = taskService
     .decorate(tasks.filter((t) => t.dueDate && t.dueDate < today && !OPEN.includes(t.status)))
-    .sort((a, b) => b._score - a._score);
+    .sort(byDueDate);
   for (const t of overdue.slice(0, 4)) items.push({ kind: "task", overdue: true, ref: t });
 
   // 2 · Goal & project deadlines landing within 3 days

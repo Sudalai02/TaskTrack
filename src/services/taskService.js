@@ -13,6 +13,7 @@
 import * as db from "../store/db.js";
 import { uid } from "../utils/id.js";
 import { computeScore, tierOf } from "../ai/prioritizer.js";
+import { byDueDate } from "../utils/dates.js";
 import { emit } from "../utils/bus.js";
 import * as recycle from "./recycleService.js";
 
@@ -34,7 +35,9 @@ export function decorate(tasks) {
 
 export async function openTasks() {
   const decorated = decorate(await allTasks());
-  return decorated.filter((t) => OPEN.includes(t.status)).sort((a, b) => b._score - a._score);
+  // byDueDate breaks score ties so the focus picker never lists tasks in
+  // arbitrary document order.
+  return decorated.filter((t) => OPEN.includes(t.status)).sort((a, b) => b._score - a._score || byDueDate(a, b));
 }
 
 export async function createTask(data) {

@@ -22,11 +22,11 @@ export function applyTheme(theme) {
   root.classList.remove("dark");
   if (theme === "dark") {
     root.classList.add("dark");
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#151413");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#000000");
   } else if (theme === "system") {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       root.classList.add("dark");
-      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#151413");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#000000");
     } else {
       document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FAFAF9");
     }

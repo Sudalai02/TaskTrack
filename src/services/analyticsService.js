@@ -3,7 +3,7 @@
 // Range stats, per-day series, productive hours, habit consistency.
 // ============================================================
 
-import { todayISO, addDays, diffDays, fromISO } from "../utils/dates.js";
+import { todayISO, addDays, diffDays, fromISO, byDueDate } from "../utils/dates.js";
 import * as db from "../store/db.js";
 
 // ---- Goal progress helper (shared) ----
@@ -104,8 +104,10 @@ export async function currentRisks() {
   const OPEN = ["Todo", "In Progress", "Blocked"];
   const risks = [];
 
-  // Overdue tasks
-  const overdue = tasks.filter((t) => t.dueDate && t.dueDate < today && OPEN.includes(t.status));
+  // Overdue tasks — worst breach first, so the top 3 are the real emergencies
+  const overdue = tasks
+    .filter((t) => t.dueDate && t.dueDate < today && OPEN.includes(t.status))
+    .sort(byDueDate);
   for (const t of overdue.slice(0, 3)) {
     const daysOver = diffDays(t.dueDate, today);
     risks.push({ type: "task", severity: "red", title: t.title, detail: `${Math.abs(daysOver)} day${Math.abs(daysOver) !== 1 ? "s" : ""} overdue`, taskId: t.id });

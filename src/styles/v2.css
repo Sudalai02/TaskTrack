@@ -1126,6 +1126,7 @@
 .score-ring:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 50%; }
 .cat-row { cursor: pointer; border-radius: 6px; padding: 2px 4px; margin: -2px -4px; transition: background .12s ease; }
 .cat-row:hover { background: rgba(0,0,0,.03); }
+html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is invisible */
 .cat-row:focus { outline: none; }
 .cat-row:focus-visible { outline: 2px solid var(--focus); outline-offset: -1px; }
 
@@ -1874,18 +1875,18 @@ html.dark .hero-stat { color: #E0DCD4; }
 
 /* ============ DARK MODE — HARDCODED COLOR OVERRIDES ============ */
 html.dark .home-hero {
-  background: linear-gradient(150deg, #1A1916 0%, #121110 60%, #1A1612 100%);
+  background: linear-gradient(150deg, #0B0B0B 0%, #000000 60%, #0A0806 100%);
 }
 html.dark .home-hero::after {
   background: radial-gradient(circle, rgba(216,120,64,0.2) 0%, transparent 70%);
 }
 html.dark .ai-insight-banner {
-  background: linear-gradient(140deg, #1A1916 0%, #1E1C18 100%);
+  background: linear-gradient(140deg, #0B0B0B 0%, #121212 100%);
   border-color: var(--hairline);
 }
-html.dark .bell-item.unread { background: #1E1D1B; }
+html.dark .bell-item.unread { background: #0D0D0D; }
 html.dark .now-card {
-  background: linear-gradient(155deg, #1A1916 0%, #121110 55%, #1A1612 100%);
+  background: linear-gradient(155deg, #0B0B0B 0%, #000000 55%, #0A0806 100%);
 }
 html.dark .focus-ring {
   background: conic-gradient(var(--focus) 0deg 245deg, var(--hairline) 245deg 360deg);

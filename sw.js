@@ -2,7 +2,7 @@
 // NEXORA SERVICE WORKER — offline-first app shell
 // ============================================================
 
-const CACHE = "nexora-cache-v7";
+const CACHE = "nexora-cache-v8";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(self.skipWaiting());
@@ -48,20 +48,22 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // App shell + local assets: serve from cache when possible,
-  // refresh in the background.
+  // App shell + local assets. App code (JS/CSS) is NETWORK-FIRST: this app
+  // ships unbundled ES modules straight from disk with no cache-busting
+  // query strings, so a cache-first strategy here pinned the browser to
+  // whatever code it happened to load first and code fixes never arrived.
+  // Offline still works — the network failure falls through to the cache.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const fetched = fetch(event.request)
-        .then((res) => {
-          if (res && res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE).then((c) => c.put(event.request, clone));
-          }
-          return res;
-        })
-        .catch(() => cached);
-      return cached || fetched;
-    })
+    fetch(event.request)
+      .then((res) => {
+        if (res && res.ok && res.type === "basic") {
+          const clone = res.clone();
+          caches.open(CACHE).then((c) => c.put(event.request, clone));
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(event.request).then((cached) => cached || caches.match("./index.html"))
+      )
   );
 });

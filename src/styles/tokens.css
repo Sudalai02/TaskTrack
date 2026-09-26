@@ -98,16 +98,18 @@ html.dark body {
   color-scheme: dark;
 }
 html.dark {
-  --paper:        #151413;
-  --paper-raised: #1E1D1B;
-  --paper-warm:   #242220;
-  --paper-2:      #282624;
+  /* Pure black page. Surfaces stay a hair above it so cards and
+     menus still read as raised layers instead of vanishing. */
+  --paper:        #000000;
+  --paper-raised: #0D0D0D;
+  --paper-warm:   #161616;
+  --paper-2:      #1F1F1F;
   --ink:          #F0EDE8;
   --ink-soft:     #D0CCC4;
   --graphite:     #98958E;
   --graphite-dim: #706D66;
-  --hairline:     #2C2A27;
-  --hairline-strong: #3D3A36;
+  --hairline:     #2E2E2E;
+  --hairline-strong: #3D3D3D;
 
   --focus:        #6B8DB5;
   --focus-soft:   rgba(107,141,181,0.12);
