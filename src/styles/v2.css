@@ -151,10 +151,9 @@
   white-space: nowrap;
 }
 .hero-stat b { font-family: var(--font-mono); font-weight: 600; color: var(--grad-ink); }
-/* overdue is the one stat that should pull the eye. It uses a WHITE wash,
-   not an amber one: a light wash lightens a dark card, so an amber label
-   would sit at 3.8:1. White-on-white-wash is 4.9:1, and the strong border
-   separates the chip from the card. */
+/* overdue is the one stat that should pull the eye. The wash is only a 16%
+   amber tint: raising the alpha lightens the fill and pushes the label back
+   under 4.5:1, so the text stays plain --grad-ink. */
 .hero-stat-warn {
   color: var(--grad-warn-ink);
   background: var(--grad-warn-bg);
@@ -215,8 +214,8 @@
   transition: all var(--dur-quick) var(--ease);
 }
 .flow-dot-v2.passed { background: var(--grad-dot-passed); }
-/* "where am I" is carried by a solid white pill — 6.6:1 on the brightest
-   gradient stop, so it reads at a glance against the deep green. */
+/* "where am I" is carried by a solid white pill - 7.1:1 on the lightest
+   gradient stop, so it reads at a glance against the deep violet. */
 .flow-dot-v2.active { width: 22px; background: var(--grad-dot-active); }
 
 /* On a wide screen the stacked full-width buttons waste the row — the primary
@@ -1690,9 +1689,9 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 .progress-fill-slim { height: 100%; background: var(--focus); border-radius: var(--r-full); transition: width 0.3s ease; }
 
 /* ============ HOME: NOW CARD META (cleaner) ============
-   The now-card is a DARK green gradient, so these priority hues are the
-   light set. They sit on a dark pill over the card, which is what lets the
-   original light values clear 4.5:1. */
+   The now-card is a DARK violet gradient, so these priority hues are the
+   light set. They sit on a dark pill over the card, which is what keeps
+   all four at AA against all five gradient stops. */
 .now-card .now-meta-row { gap: var(--sp-3); flex-wrap: wrap; }
 .now-card .now-meta-row .prio-urgent { color: var(--grad-prio-urgent); }
 .now-card .now-meta-row .prio-high   { color: var(--grad-prio-high); }
@@ -1703,8 +1702,8 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
   font-weight: 700;
   padding: 2px 9px;
   border-radius: var(--r-full);
-  /* dark pill, not a white wash: keeps the 4 priority hues distinguishable
-     AND holds every one of them at AA against all five gradient stops */
+  /* dark pill, not a white wash: a wash would lift the fill and crush the
+     label, and these four would stop reading as distinct */
   background: var(--grad-prio-bg);
 }
 .meta-chip {
@@ -1980,8 +1979,8 @@ html.dark .cat-row:hover { background: var(--paper-2); } /* black-on-black is in
 }
 
 /* ============ DARK MODE — HARDCODED COLOR OVERRIDES ============
-   .home-hero / .now-card need no entry: the gradient cards carry their own
-   ink and render identically in both themes. */
+   .home-hero / .now-card need no entry: their gradients come from
+   --grad-hero / --grad-now, which are redefined per mode in tokens.css. */
 html.dark .ai-insight-banner {
   background: linear-gradient(140deg, #1C1C1C 0%, #242424 100%);
   border-color: var(--hairline);

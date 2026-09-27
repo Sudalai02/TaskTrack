@@ -17,7 +17,9 @@ const sections = [
 
 let active = "account";
 
-const THEME_COLOR_DARK = "#121212";
+/* must match --paper in tokens.css for each theme, or the mobile browser
+   chrome tints a notch the wrong colour */
+const THEME_COLOR_DARK = "#0B0B0B";
 const THEME_COLOR_LIGHT = "#FAFAF9";
 
 export function applyTheme(theme) {

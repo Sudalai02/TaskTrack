@@ -18,7 +18,7 @@ export async function createHabit(data) {
     timeOfDay: data.timeOfDay || "08:00",
     durationMinutes: Number(data.durationMinutes) || 30,
     weekdays: (data.weekdays && data.weekdays.length ? data.weekdays : [1, 2, 3, 4, 5]).slice().sort(),
-    color: data.color || "#3D5A80",
+    color: data.color || "#0F7A4F",
     archived: false,
     createdAt: new Date().toISOString(),
   };

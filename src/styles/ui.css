@@ -408,10 +408,10 @@ textarea:focus-visible {
 
 /* Category color accents — edge strip, meta dot, meta text */
 .goal-card .cat-personal { background: var(--focus); }
-.goal-card .cat-career   { background: var(--violet); }
+.goal-card .cat-career   { background: var(--sky); }
 .goal-card .cat-health   { background: var(--good); }
 .goal-card .cat-learning { background: var(--warn); }
-.goal-card .cat-finance  { background: var(--teal); }
+.goal-card .cat-finance  { background: var(--amber); }
 .goal-card .goal-meta {
   display: inline-flex;
   align-items: center;
@@ -495,15 +495,17 @@ textarea:focus-visible {
   padding: 7px;
 }
 
-/* ============ INSIGHTS — colored module chips ============ */
+/* ============ INSIGHTS — colored module chips ============
+   acc-teal and acc-violet are gone: teal reads as the brand green at chip
+   size and violet is out of the palette entirely. */
 .module-emoji.acc-focus  { background: var(--focus-soft);  border-color: transparent; }
 .module-emoji.acc-ember  { background: var(--ember-soft);  border-color: transparent; }
 .module-emoji.acc-warn   { background: var(--warn-soft);   border-color: transparent; }
 .module-emoji.acc-good   { background: var(--good-soft);   border-color: transparent; }
 .module-emoji.acc-danger { background: var(--danger-soft); border-color: transparent; }
-.module-emoji.acc-violet { background: var(--violet-soft); border-color: transparent; }
+.module-emoji.acc-amber  { background: var(--amber-soft);  border-color: transparent; }
 .module-emoji.acc-sky    { background: var(--sky-soft);    border-color: transparent; }
-.module-emoji.acc-teal   { background: var(--teal-soft);   border-color: transparent; }
+.module-emoji.acc-clay   { background: var(--clay-soft);   border-color: transparent; }
 
 /* ================================================================
    TOUCH DEVICES — affordances that were hover-only

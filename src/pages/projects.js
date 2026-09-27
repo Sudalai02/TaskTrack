@@ -61,7 +61,7 @@ function projectModal(goals, p = null) {
     extraClass: "wide",
     values: p
       ? { name: p.name, description: p.description, goalId: p.goalId || "", status: p.status, deadline: p.deadline || "", color: p.color }
-      : { status: "Planning", color: "#3D5A80" },
+      : { status: "Planning", color: "#0F7A4F" },
     fields: [
       { name: "name", label: "Project name", required: true, placeholder: "e.g. Mobile app v1" },
       { name: "description", label: "Description", type: "textarea", rows: 2 },
@@ -83,11 +83,11 @@ function projectModal(goals, p = null) {
         label: "Folder color",
         type: "select",
         options: [
-          { value: "#3D5A80", label: "Blue" },
-          { value: "#C4622D", label: "Ember" },
-          { value: "#3F7A5C", label: "Green" },
-          { value: "#B8842E", label: "Amber" },
-          { value: "#6B4E8E", label: "Violet" },
+          { value: "#0F7A4F", label: "Green" },
+          { value: "#2F6FB5", label: "Blue" },
+          { value: "#B0521F", label: "Ember" },
+          { value: "#966507", label: "Amber" },
+          { value: "#B03A5B", label: "Rose" },
         ],
       },
     ],
