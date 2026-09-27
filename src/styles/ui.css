@@ -570,3 +570,65 @@ textarea:focus-visible {
   .folder-item { min-height: 44px; }
   .session-row { min-height: 44px; }
 }
+
+/* ================================================================
+   HOME SIGNATURE CARDS - PHONE HEIGHT + DISPLAY TYPE
+   ================================================================
+   At 360-414px both cards run tall. The hero stacks greeting + date +
+   tagline + progress + up to four stat chips, and the now-card reserves
+   a fixed 240px stage, so together they push the rest of the day below
+   the fold on exactly the screens that have the least room.
+
+   Nothing is hidden here - no content is dropped, no stat is removed.
+   Only the vertical rhythm is tightened, so the cards stay readable
+   while giving the page back roughly a third of its height. Desktop
+   keeps the roomier spacing. */
+@media (max-width: 414px) {
+  /* --- both cards: less inset, slightly tighter corner --- */
+  .home-hero,
+  .now-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  /* --- hero --- */
+  .home-greet { font-size: 23px; line-height: 1.1; }
+  .home-date { margin-top: 3px; font-size: 12.5px; }
+  .home-tagline {
+    margin-top: 8px;
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .hero-progress { margin-top: 14px; }
+  .hero-progress-top { margin-bottom: 6px; font-size: 11px; }
+  .hero-track { height: 8px; }
+  .hero-stats { margin-top: 10px; gap: 6px 8px; }
+  .hero-stat { padding: 5px 9px; font-size: 12px; }
+
+  /* --- now card ---
+     #flow-stage carries a 240px min-height so the card does not jump
+     between flow steps of different lengths. That is worth keeping on
+     desktop, but on a phone it is the single biggest cost in the card,
+     and every step already renders at least a task line plus a meta row. */
+  #flow-stage { min-height: 124px; }
+  .now-card-v2 .now-task { font-size: 21px; margin-bottom: 8px; }
+  .now-meta-row { margin-bottom: 12px; }
+  .now-why { padding-top: 12px; margin-bottom: 12px; }
+  .now-actions-v2 { margin-top: 12px; }
+  .flow-nav-v2 { margin-top: 10px; }
+}
+
+/* ================================================================
+   THE TWO CARD HEADLINES
+   ================================================================
+   Fraunces is a variable font with an optical-size axis, and the browser
+   picks opsz from the font-size. Auto-sizing a 21-30px headline lands on
+   a low opsz, which is the loose, low-contrast cut of the face - the one
+   that looks generic. Pinning opsz up to a display value gives the
+   tighter, higher-contrast shapes the face was drawn for, and the tighter
+   fit also shaves a line off a two-line task title.
+
+   wght is left alone on purpose: an axis that font-variation-settings
+   does not mention keeps the value font-weight gave it. */
+.home-hero .home-greet { font-variation-settings: "opsz" 48; }
+.now-card .now-task { font-variation-settings: "opsz" 32; }
